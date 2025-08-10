@@ -2,12 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import api from "../services/api";
 
-export default function ChatWindow({ wa_id, socket, refreshChats, currentUser }) {
+export default function ChatWindow({ wa_id, socket, refreshChats, currentUser, onBack }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const endRef = useRef();
 
-  // Fetch messages between two users
   async function fetchMsgs() {
     try {
       const res = await api.get(`/messages/${currentUser}/${wa_id}`);
@@ -21,21 +20,14 @@ export default function ChatWindow({ wa_id, socket, refreshChats, currentUser })
   useEffect(() => {
     fetchMsgs();
     if (socket) socket.emit("joinRoom", currentUser);
-
     if (socket) {
       socket.on("message:new", (m) => {
-        if (
-          (m.from === currentUser && m.to === wa_id) ||
-          (m.to === currentUser && m.from === wa_id)
-        ) {
+        if ((m.from === currentUser && m.to === wa_id) || (m.to === currentUser && m.from === wa_id)) {
           setMessages((prev) => [...prev, m]);
         }
       });
     }
-
-    return () => {
-      if (socket) socket.off("message:new");
-    };
+    return () => socket?.off("message:new");
   }, [wa_id, socket, currentUser]);
 
   useEffect(() => {
@@ -45,13 +37,8 @@ export default function ChatWindow({ wa_id, socket, refreshChats, currentUser })
   async function handleSend(e) {
     e.preventDefault();
     if (!text.trim()) return;
-
     try {
-      await api.post("/messages/send", {
-        from: currentUser,
-        to: wa_id,
-        text,
-      });
+      await api.post("/messages/send", { from: currentUser, to: wa_id, text });
       setText("");
     } catch (err) {
       console.error("Error sending message:", err);
@@ -59,16 +46,20 @@ export default function ChatWindow({ wa_id, socket, refreshChats, currentUser })
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-100 to-gray-200">
+    <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-100 to-gray-200 h-screen">
    
       <div className="p-4 border-b border-gray-300 bg-white shadow-md sticky top-0 z-10 flex items-center gap-3">
+        
+        <button className="md:hidden text-green-600 font-bold" onClick={onBack}>
+          ←
+        </button>
         <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">
           {wa_id[0].toUpperCase()}
         </div>
         <div className="font-semibold text-lg">{wa_id}</div>
       </div>
 
-
+     
       <div className="flex-1 overflow-auto p-4 space-y-3">
         {messages.map((m, index) => (
           <motion.div
@@ -76,9 +67,7 @@ export default function ChatWindow({ wa_id, socket, refreshChats, currentUser })
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className={`flex ${
-              m.from === currentUser ? "justify-end" : "justify-start"
-            }`}
+            className={`flex ${m.from === currentUser ? "justify-end" : "justify-start"}`}
           >
             <div
               className={`p-3 rounded-2xl shadow-md max-w-[75%] backdrop-blur-md ${
@@ -97,21 +86,15 @@ export default function ChatWindow({ wa_id, socket, refreshChats, currentUser })
         <div ref={endRef} />
       </div>
 
-   
-      <form
-        onSubmit={handleSend}
-        className="p-3 border-t border-gray-300 bg-white flex items-center gap-2 sticky bottom-0"
-      >
+     
+      <form onSubmit={handleSend} className="p-3 border-t border-gray-300 bg-white flex items-center gap-2 sticky bottom-0">
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
           className="flex-1 p-2 rounded-full border border-gray-300 focus:ring-2 focus:ring-green-400 outline-none"
           placeholder="Type a message..."
         />
-        <button
-          type="submit"
-          className="px-5 py-2 bg-green-500 hover:bg-green-600 transition text-white rounded-full shadow-md"
-        >
+        <button type="submit" className="px-5 py-2 bg-green-500 hover:bg-green-600 transition text-white rounded-full shadow-md">
           Send
         </button>
       </form>
