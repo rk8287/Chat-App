@@ -46,7 +46,7 @@ app.set('io', io);
 // Routes
 app.use('/api/messages', require('./routes/message'));
 
-// health
+//Api health
 app.get('/api/health', (req,res)=> res.json({ok:true, time: new Date()}));
 
 const PORT = process.env.PORT || 5000;

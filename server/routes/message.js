@@ -49,7 +49,7 @@ router.post('/send', async (req, res) => {
     const { from, to, text } = req.body;
     const now = new Date();
 
-    // Save only one copy of the message
+  
     const msg = new Message({
       from,
       to,
@@ -62,7 +62,7 @@ router.post('/send', async (req, res) => {
 
     const io = req.app.get('io');
 
-    // Emit to both participants
+ 
     io.to(from).emit('message:new', msg);
     io.to(to).emit('message:new', msg);
 

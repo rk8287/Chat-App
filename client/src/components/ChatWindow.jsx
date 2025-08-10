@@ -1,4 +1,3 @@
-// ChatWindow.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import api from "../services/api";
@@ -61,7 +60,7 @@ export default function ChatWindow({ wa_id, socket, refreshChats, currentUser })
 
   return (
     <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-100 to-gray-200">
-      {/* Header */}
+   
       <div className="p-4 border-b border-gray-300 bg-white shadow-md sticky top-0 z-10 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">
           {wa_id[0].toUpperCase()}
@@ -69,7 +68,7 @@ export default function ChatWindow({ wa_id, socket, refreshChats, currentUser })
         <div className="font-semibold text-lg">{wa_id}</div>
       </div>
 
-      {/* Messages */}
+
       <div className="flex-1 overflow-auto p-4 space-y-3">
         {messages.map((m, index) => (
           <motion.div
@@ -98,7 +97,7 @@ export default function ChatWindow({ wa_id, socket, refreshChats, currentUser })
         <div ref={endRef} />
       </div>
 
-      {/* Input */}
+   
       <form
         onSubmit={handleSend}
         className="p-3 border-t border-gray-300 bg-white flex items-center gap-2 sticky bottom-0"

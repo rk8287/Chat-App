@@ -12,7 +12,7 @@ export default function ChatList({ chats, active, onSelect, currentUser }) {
 
   return (
     <div className="bg-white border-r border-gray-300 flex flex-col h-screen">
-      {/* Header */}
+      
       <div className="p-4 border-b border-gray-300 flex justify-between items-center bg-green-500 text-white">
         <span className="font-semibold">{currentUser}</span>
         <button
@@ -23,7 +23,7 @@ export default function ChatList({ chats, active, onSelect, currentUser }) {
         </button>
       </div>
 
-      {/* Chat List */}
+      
       <div className="flex-1 overflow-auto">
         {chats.map((c) => (
           <div

@@ -20,7 +20,7 @@ function App() {
 
     socket.current.on('connect', () => {
       console.log('Socket connected as', currentUser);
-      // Join a room named after the current user so they get incoming messages
+     
       socket.current.emit('joinRoom', currentUser);
     });
 
@@ -87,7 +87,7 @@ function App() {
   // Main chat layout
   return (
     <div className="min-h-screen flex">
-      {/* Left - Chat List */}
+      
       <div className="w-full md:w-1/3 lg:w-1/4 border-r h-screen overflow-auto">
         <ChatList
           chats={chats}
@@ -97,7 +97,7 @@ function App() {
         />
       </div>
 
-      {/* Right - Chat Window */}
+     
       <div className="hidden md:flex w-2/3 lg:w-3/4 h-screen">
         {active ? (
           <ChatWindow
@@ -111,7 +111,7 @@ function App() {
         )}
       </div>
 
-      {/* Mobile: show chat window below */}
+      
       <div className="md:hidden w-full">
         {active ? (
           <ChatWindow
