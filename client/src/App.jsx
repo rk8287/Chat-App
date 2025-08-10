@@ -8,6 +8,7 @@ const API = import.meta.env.VITE_API_URL || "https://chat-app-c4e5.onrender.com/
 
 function App() {
   const [currentUser, setCurrentUser] = useState(localStorage.getItem("chatUser") || "");
+  const [usernameInput, setUsernameInput] = useState(""); 
   const [chats, setChats] = useState([]);
   const [active, setActive] = useState(null);
   const socket = React.useRef();
@@ -32,44 +33,54 @@ function App() {
     if (!active && res.data.length) setActive(res.data[0].wa_id);
   }
 
-  useEffect(() => { fetchChats(); }, [currentUser]);
+  useEffect(() => {
+    fetchChats();
+  }, [currentUser]);
 
+  // LOGIN SCREEN
   if (!currentUser) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (currentUser.trim()) {
-              localStorage.setItem("chatUser", currentUser);
-              setCurrentUser(currentUser);
-            }
-          }}
-          className="p-6 bg-white rounded-xl shadow-lg w-80"
-        >
+        <div className="p-6 bg-white rounded-xl shadow-lg w-80">
           <h2 className="text-lg font-semibold mb-4 text-center">Login to Chat</h2>
+
           <input
             className="border p-2 mb-4 w-full rounded-md"
             placeholder="Enter your username/number"
-            value={currentUser}
-            onChange={(e) => setCurrentUser(e.target.value)}
+            value={usernameInput}
+            onChange={(e) => setUsernameInput(e.target.value)}
+            autoComplete="off"
           />
-          <button className="bg-green-500 w-full py-2 text-white rounded-md hover:bg-green-600">
+
+          <button
+            type="button"
+            onClick={() => {
+              if (usernameInput.trim()) {
+                localStorage.setItem("chatUser", usernameInput.trim());
+                setCurrentUser(usernameInput.trim());
+              }
+            }}
+            className="bg-green-500 w-full py-2 text-white rounded-md hover:bg-green-600"
+          >
             Login
           </button>
-        </form>
+        </div>
       </div>
     );
   }
 
+  // MAIN CHAT UI
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-     
-      <div className={`${active ? "hidden md:block" : "block"} w-full md:w-1/3 lg:w-1/4 border-r h-screen`}>
+   
+      <div
+        className={`${
+          active ? "hidden md:block" : "block"
+        } w-full md:w-1/3 lg:w-1/4 border-r h-screen`}
+      >
         <ChatList chats={chats} active={active} onSelect={setActive} currentUser={currentUser} />
       </div>
 
-     
       <div className={`${active ? "block" : "hidden"} md:block w-full md:w-2/3 lg:w-3/4`}>
         {active ? (
           <ChatWindow
@@ -77,7 +88,7 @@ function App() {
             socket={socket.current}
             refreshChats={fetchChats}
             currentUser={currentUser}
-            onBack={() => setActive(null)} 
+            onBack={() => setActive(null)}
           />
         ) : (
           <div className="flex items-center justify-center h-full text-gray-500">
