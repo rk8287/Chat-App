@@ -170,7 +170,15 @@ npm run dev
 
 ### 💻 Desktop View
 
-![Desktop Screenshot](screenshot-desktop.png)
+<img width="1920" height="977" alt="screen-shot-one" src="https://github.com/user-attachments/assets/223d76fc-b70c-4625-8040-1f33b78a9060" />
+<img width="1920" height="977" alt="screen-shot-two" src="https://github.com/user-attachments/assets/f8a2733e-fe93-4ce6-a3a3-85da4e9a2b69" />
+<img width="1920" height="982" alt="screen-shot-three" src="https://github.com/user-attachments/assets/d6b65203-bbc8-4642-a486-99f6d0a764b5" />
+<img width="1920" height="982" alt="screen-shot-four" src="https://github.com/user-attachments/assets/5d85b8f3-9e09-4bb1-87b9-250f2ccc86aa" />
+<img width="1920" height="982" alt="userFirst" src="https://github.com/user-attachments/assets/cdab178f-2a1d-40f8-af61-b10b8e70d209" />
+<img width="1920" height="987" alt="userSecond" src="https://github.com/user-attachments/assets/c82aa0a7-ea4a-4f65-9abb-f9e04e967e7a" />
+
+
+
 
 ### 📱 Mobile View
 
