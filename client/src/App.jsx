@@ -4,7 +4,7 @@ import ChatWindow from "./components/ChatWindow";
 import api from "./services/api";
 import { io } from "socket.io-client";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API = import.meta.env.VITE_API_URL || "https://chat-app-c4e5.onrender.com/api";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(localStorage.getItem("chatUser") || "");
