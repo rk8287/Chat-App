@@ -9,16 +9,23 @@ const { Server } = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',  // If using Vite locally
+  'https://chat-app-mq1j.vercel.app',
+  'https://chat-app-mu-jet.vercel.app' // ✅ New frontend link
+];
+
 const io = new Server(server, {
   cors: {
-    origin: ['https://chat-app-mq1j.vercel.app', 'http://localhost:3000'],
-    methods: ['GET', 'POST']
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
-
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://chat-app-mq1j.vercel.app'],
+  origin: allowedOrigins,
   credentials: true
 }));
 
@@ -26,9 +33,9 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // connect to mongodb
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-.then(()=> console.log('MongoDB connected'))
-.catch(err=> { console.error(err); process.exit(1); });
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => { console.error(err); process.exit(1); });
 
 // Models
 const Message = require('./models/Message');
@@ -47,7 +54,7 @@ app.set('io', io);
 app.use('/api/messages', require('./routes/message'));
 
 //Api health
-app.get('/api/health', (req,res)=> res.json({ok:true, time: new Date()}));
+app.get('/api/health', (req, res) => res.json({ ok: true, time: new Date() }));
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, ()=> console.log(`Server running on ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on ${PORT}`));
